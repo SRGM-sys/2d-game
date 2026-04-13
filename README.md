@@ -12,14 +12,14 @@
   <img src="./gameplay.png" width="80%" alt="2D Gameplay Screenshot">
   <br>
   <br>
-  <em>Exploring the world, managing inventory, and interacting with the environment in real-time.</em>
+  <em>Exploring the world, managing inventory, and interacting with the environment.</em>
 </div>
 
 <br>
 
 ## 🛠️ Technical Overview
 
-This project is a deep dive into game development using **Java (Standard Edition)**. It features a hand-crafted engine that manages the typical challenges of 2D real-time applications.
+Focusing on game development with Java (Standard Edition), this project features a hand-crafted engine that manages the typical challenges of 2D real-time applications.
 
 ### 🚀 Core Systems
 <ul>
