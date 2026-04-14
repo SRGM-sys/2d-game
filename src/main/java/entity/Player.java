@@ -146,7 +146,7 @@ public class Player extends Entity{
                 case "chest":
                     gp.ui.gameFinished = true;
                     gp.stopMusic();
-                    gp.playMusic(4);
+                    gp.soundEffect(4);
                     break;
             }
         }

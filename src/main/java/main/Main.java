@@ -2,7 +2,6 @@ package main;
 
 import javax.swing.JFrame;
 
-// Comentario para hacer un commit de prueba
 
 public class Main {
 

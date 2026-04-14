@@ -4,7 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import object.Obj_Key;
+
+/*
+* Esta clase manejará todo lo relacionado a la interfaz de usuario
+* Mensajes de texto
+* Iconos de elementos
+*/
 
 public class UI {
     
@@ -16,6 +23,9 @@ public class UI {
     public boolean gameFinished = false;
     public String message;
     int messageCounter = 0;
+    
+    double playTime; // Se encargará de cronometrar el tiempo de juego
+    DecimalFormat dFormat = new DecimalFormat("#0,00"); // Le daremos formato al cronometro
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -30,9 +40,10 @@ public class UI {
         messageOn = true;
     }
 
-    // Vamos a dibujar texto de ayuda en pantalla
-    /* Instanciar objetos en métodos que se llaman a 60FPS podría
-    hacer que el programa se vuelva lento, por eso evitemos eso */
+    /*
+    * Esta función va a dibujar el texto de ayuda de cuantas llaves
+    * tenemos en nuestro inventario actualmente
+    */
     public void draw(Graphics2D g2){
         
         g2.setFont(arial_40);
@@ -49,6 +60,12 @@ public class UI {
             x = gp.screenWidth/2 - textLenght/2;
             y = gp.screenHeight/2 - (gp.tileSize*3);
             g2.drawString(text, x, y);
+
+            text = "You time is: "+dFormat.format(playTime) + "!";
+            textLenght = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            x = gp.screenWidth/2 - textLenght/2;
+            y = gp.screenHeight/2 + (gp.tileSize*4);
+            g2.drawString(text, x, y);  
             
             g2.setFont(arial_80B);
             g2.setColor(Color.yellow);
@@ -56,12 +73,18 @@ public class UI {
             textLenght = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
             x = gp.screenWidth/2 - textLenght/2;
             y = gp.screenHeight/2 + (gp.tileSize*2);
-            g2.drawString(text, x, y);
+            g2.drawString(text, x, y);     
+            
+            // Cuando consiga el tesoro todo el juego se detendrá
+            gp.gameThread = null; 
             
         } else{
             
             g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2, gp.tileSize, gp.tileSize, null);
             g2.drawString("X "+gp.player.hashKey, 74, 65);
+            
+            playTime += (double) 1;
+            g2.drawString("Time: "+dFormat.format(playTime), gp.tileSize*11, 65);
 
             if(messageOn){
                 g2.setFont(g2.getFont().deriveFont(20F));
