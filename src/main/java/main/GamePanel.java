@@ -93,7 +93,6 @@ public class GamePanel extends JPanel implements Runnable{
                 drawCount++;
             }
             if(timer >= 1000000000){
-                System.out.println("FPS: "+drawCount);
                 drawCount = 0;
                 timer = 0;
             }            
@@ -108,6 +107,13 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g; //Casting: Graphics2D extends Graphics
+        
+        // DEBUG TIME START
+        long drawStart = 0;
+        if(keyH.checkDrawTime){
+            drawStart = System.nanoTime();
+        }
+        
         
         // TILE
         tileM.draw(g2); // Es importante dibujar antes del jugador para no taparlo
@@ -124,6 +130,15 @@ public class GamePanel extends JPanel implements Runnable{
         
         // UI
         ui.draw(g2);
+        
+        // DEBUG TIME END
+        if(keyH.checkDrawTime){
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            // Vamos a presentar el tiempo de Debug en pantalla
+            g2.setColor(Color.white);
+            g2.drawString("Draw Time: "+passed, 400, 550); //Coodenadas de pantalla
+        }
         
         g2.dispose(); // Buena practica para ahorrar memoria
     }

@@ -7,6 +7,7 @@ public class KeyHandler implements KeyListener{
     // KeyListener: This listener interface for reciving keyboard events 
     
     public boolean upPressed, downPressed, leftPressed, rightPressed;
+    public boolean checkDrawTime = false;
     
     @Override // Generalmente este no se usa
     public void keyTyped(KeyEvent e) {
@@ -31,6 +32,14 @@ public class KeyHandler implements KeyListener{
             rightPressed = true;
         }
         
+        // Show Draw Time: Cada vez que presione T, cambia de estado
+        if(code == KeyEvent.VK_T){
+            if(checkDrawTime){
+                checkDrawTime = false;
+            } else{
+                checkDrawTime = true;
+            }
+        }
     }
 
     @Override

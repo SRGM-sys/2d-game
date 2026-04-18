@@ -1,23 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package object;
 
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import main.GamePanel;
 
-/**
- *
- * @author Usuario
- */
+
 public class Obj_Chest extends SuperObject{
     
-    public Obj_Chest(){
+    GamePanel gp;
+    
+    public Obj_Chest(GamePanel gp){
+        this.gp = gp;
         name = "chest";
         
         try{
             image = ImageIO.read(getClass().getResourceAsStream("/objects/chest.png"));
+            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
         } catch(IOException e){
             e.printStackTrace();
         }
