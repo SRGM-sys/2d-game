@@ -6,10 +6,10 @@
 
 <br>
 
-## 📸 Gameplay
+## 📸 Game
 
 <div align="center">
-  <img src="./gameplay.png" width="80%" alt="2D Gameplay Screenshot">
+  <img src="./game_image.png" width="80%" alt="2D Gameplay Screenshot">
   <br>
   <br>
   <em>Exploring the world, managing inventory, and interacting with the environment.</em>
