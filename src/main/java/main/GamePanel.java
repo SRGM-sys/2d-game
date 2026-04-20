@@ -1,5 +1,6 @@
 package main;
 
+import entity.Entity;
 import entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable{
     // ENTITY & OBJECT
     public Player player = new Player(this, keyH);
     public SuperObject obj[] = new SuperObject[10]; // Mostrar 10 objetos a la vez
+    public Entity npc[] = new Entity[10];
     
     // GAME STATE (Puedo poner pausa al juego)
     public int gameState;
@@ -62,6 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
     
     public void setupGame(){
         aSetter.setObject();
+        aSetter.setNPC();
         playMusic(0);
         gameState = playState;
     }
@@ -108,7 +111,14 @@ public class GamePanel extends JPanel implements Runnable{
     public void update(){
         
         if(gameState == playState){
-            player.update(); // Con esto el jugador se puede mover (WSAD)
+            // El jugador y los NPC se pueden mover
+            player.update(); 
+            for (Entity npc1 : npc) {
+            if (npc1 != null) {
+                npc1.update();
+            }
+        }
+            
         }
         if(gameState == pauseState){
             // Por ahora nada
@@ -131,11 +141,17 @@ public class GamePanel extends JPanel implements Runnable{
         
         // TILE
         tileM.draw(g2); // Es importante dibujar antes del jugador para no taparlo
-        
         // OBJECT
-        for(int i = 0; i<obj.length; i++){
-            if(obj[i] != null){
-                obj[i].draw(g2, this);
+        for (SuperObject obj1 : obj) {
+            if (obj1 != null) {
+                obj1.draw(g2, this);
+            }
+        }
+        
+        // NPC
+        for (Entity npc1 : npc) {
+            if (npc1 != null) {
+                npc1.drawNPC(g2);
             }
         }
 
