@@ -1,7 +1,6 @@
 
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -20,8 +19,6 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
     
-    // Cuantas llaves el jugador ha recogido
-    public int hashKey = 0;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -132,36 +129,7 @@ public class Player extends Entity{
     public void pickUpObject(int i){
         // Si i = 999, significa que no hemos tocado el objeto
         if(i != 999){
-            String objectName = gp.obj[i].name;
-            switch(objectName){
-                case "key": 
-                    gp.soundEffect(1);
-                    hashKey++; 
-                    gp.obj[i] = null;
-                    gp.ui.showMessage("You got a key!");
-                    break;
-                case "boots":
-                    gp.soundEffect(2);
-                    speed+=2;
-                    gp.obj[i] = null;
-                    gp.ui.showMessage("Speed up");
-                    break;
-                case "door":
-                    if(hashKey > 0){
-                        gp.soundEffect(3);
-                        hashKey--;
-                        gp.obj[i] = null;
-                        gp.ui.showMessage("You open the door!");
-                    } else{
-                        gp.ui.showMessage("You need a key!");
-                    }
-                    break;
-                case "chest":
-                    gp.ui.gameFinished = true;
-                    gp.stopMusic();
-                    gp.soundEffect(4);
-                    break;
-            }
+            
         }
     }
     

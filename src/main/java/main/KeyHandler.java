@@ -3,11 +3,19 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+// Con esto manejaremos el juego mediantes las teclas del teclado
+
 public class KeyHandler implements KeyListener{
     // KeyListener: This listener interface for reciving keyboard events 
     
+    GamePanel gp;
+    
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     public boolean checkDrawTime = false;
+    
+    public KeyHandler(GamePanel gp){
+        this.gp = gp;
+    }
     
     @Override // Generalmente este no se usa
     public void keyTyped(KeyEvent e) {
@@ -30,6 +38,15 @@ public class KeyHandler implements KeyListener{
         }
         if(code == KeyEvent.VK_D){
             rightPressed = true;
+        }
+        
+        // Vamos a alternar entre Pausa y Play
+        if(code == KeyEvent.VK_P){
+            if(gp.gameState == gp.playState){
+                gp.gameState = gp.pauseState;
+            } else{
+                gp.gameState = gp.playState;
+            }
         }
         
         // Show Draw Time: Cada vez que presione T, cambia de estado

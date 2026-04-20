@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;
     
     // SYSTEM
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound(); // Main music
     Sound sound = new Sound(); // Sound Effects
     Thread gameThread;
@@ -44,6 +44,11 @@ public class GamePanel extends JPanel implements Runnable{
     // ENTITY & OBJECT
     public Player player = new Player(this, keyH);
     public SuperObject obj[] = new SuperObject[10]; // Mostrar 10 objetos a la vez
+    
+    // GAME STATE (Puedo poner pausa al juego)
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
     
     
     
@@ -58,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame(){
         aSetter.setObject();
         playMusic(0);
+        gameState = playState;
     }
         
     public void startGameThread(){
@@ -100,7 +106,15 @@ public class GamePanel extends JPanel implements Runnable{
     }
     
     public void update(){
-        player.update();
+        
+        if(gameState == playState){
+            player.update(); // Con esto el jugador se puede mover (WSAD)
+        }
+        if(gameState == pauseState){
+            // Por ahora nada
+        }
+        
+        
     }
     
     @Override
