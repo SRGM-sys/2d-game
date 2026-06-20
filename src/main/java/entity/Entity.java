@@ -12,13 +12,10 @@ import main.UtilityTool;
 public class Entity {
     
     public GamePanel gp;
-    
     public int worldX,worldY;
     public int speed;
-    
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public String direction;
-    
     public int spriteCounter = 0;
     public int spriteNum = 1;
     
@@ -28,12 +25,15 @@ public class Entity {
     public boolean collisionOn = false;
     
     public int actionLockCounter = 0;
+    String dialogues[] = new String[20];
+    int dialogueIndex = 0;
     
     public Entity(GamePanel gp){
         this.gp = gp;
     }
     
-    
+    public void setAction(){}
+
     // Vamos a escalar los personajes antes de entrar al bucle
     public BufferedImage setup(String folder, String imageName){
         
@@ -51,9 +51,22 @@ public class Entity {
         return image;
     }
     
-    public void setAction(){
+    public void speak(){
+        if(dialogues[dialogueIndex] == null){
+            dialogueIndex = 0;
+        }
         
+        gp.ui.currentDialogue = dialogues[dialogueIndex];
+        dialogueIndex++;
+
+        switch(gp.player.direction){
+            case "up": direction = "down"; break;
+            case "left": direction = "right"; break;
+            case "down": direction = "up"; break;
+            case "right": direction = "left"; break;
+        }
     }
+    
     
     public void update(){
         setAction();

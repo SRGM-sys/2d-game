@@ -28,7 +28,6 @@ public class Player extends Entity{
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y; 
         
-        
         setDefaultValues();
         getPlayerImage();
     }
@@ -56,6 +55,7 @@ public class Player extends Entity{
     
     /* VAMOS A PONER EL UPDATE Y DRAW PARA CADA ENTIDAD
     Esto lo haremos para evitar un código gigantesco en GamePanel*/
+    @Override
     public void update(){
         
         // Este gran if me va a permtir que el personaje no se mueva si el 
@@ -110,9 +110,17 @@ public class Player extends Entity{
     }
     
     public void interactNPC(int i){
+        // Cuando i = 999 es pq tocamos a la entidad
         if(i != 999){
-            System.out.println("Hit NPC");
+            if(gp.keyH.enterPressed){
+                gp.gameState = gp.dialogueState;
+                gp.npc[i].speak();
+            }
         }
+        
+        // Lo sacamos del if(i != 999). De esta forma, si presiono Enter al aire,
+        // se resetea inmediatamente y no se queda "guardado" como true.
+        gp.keyH.enterPressed = false;
     }
     
     public void pickUpObject(int i){

@@ -14,10 +14,7 @@ public class GamePanel extends JPanel implements Runnable{
     
     // SCREEN SETTINGS
     final int OriginalTileSize = 16; // 16px * 16px
-    /* 16PX
-    Eran el tamaño ideal en consolas antiguas, pero ahora en computadoras
-    actuales las resoluciones son muy altas, y 16px es muy pequeño
-    CONCLUSIÓN: Vamos a escalarlo*/ 
+    // Escalamos los 32 pixeles, para que no se vea minusculo 
     final int scale = 3;
     public final int tileSize = OriginalTileSize * scale;
     public final int maxScreenCol = 16;
@@ -33,14 +30,15 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;
     
     // SYSTEM
-    KeyHandler keyH = new KeyHandler(this);
+    Thread gameThread;
     Sound music = new Sound(); // Main music
     Sound sound = new Sound(); // Sound Effects
-    Thread gameThread;
+    public KeyHandler keyH = new KeyHandler(this);
     public TileManager tileM = new TileManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public UI ui = new UI(this);
     public AssetSetter aSetter = new AssetSetter(this);
+  
     
     // ENTITY & OBJECT
     public Player player = new Player(this, keyH);
@@ -51,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
     
     
     

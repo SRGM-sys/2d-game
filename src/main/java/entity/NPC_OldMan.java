@@ -11,6 +11,7 @@ public class NPC_OldMan extends Entity{
         speed = 1;
         
         getOldManImage();
+        setDialogue();
     }
     
     public void getOldManImage(){
@@ -23,6 +24,13 @@ public class NPC_OldMan extends Entity{
         left2 = setup("npc", "oldman_left_2");
         right1 = setup("npc", "oldman_right_1");
         right2 = setup("npc", "oldman_right_2");
+    }
+    
+    public void setDialogue(){
+        dialogues[0] = "Hola, srgm";
+        dialogues[1] = "Asi que llegaste a esta isla para \nencontrar el tesoro";
+        dialogues[2] = "Yo solia ser un gran mago, pero \nahora... Estoy un poco viejo para \nir de aventuras";
+        dialogues[3] = "Bueno, que la fortuna te acompañe";
     }
     
     // En este método trabajaremos la IA del NPC
@@ -50,7 +58,12 @@ public class NPC_OldMan extends Entity{
             
             actionLockCounter = 0;
         }
-        
-        
     }
+    
+    @Override
+    public void speak(){
+        super.speak();
+    }
+    
+    
 }
