@@ -3,7 +3,15 @@ package main;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+//----Estas 3 me sirven para manejar el texto en pantalla----
+import java.awt.Shape;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
+//-----------------------------------------------------------
+import java.io.IOException;
+import java.io.InputStream;
 
 /*
 * Esta clase manejará todo lo relacionado a la interfaz de usuario
@@ -15,17 +23,24 @@ public class UI {
     
     GamePanel gp;
     Graphics2D g2;
-    Font arial_40, arial_80B;
+    Font fixedsys;
     public boolean messageOn = false;
     public String message;
     int messageCounter = 0;
     public boolean gameFinished = false;
     public String currentDialogue;
 
-    public UI(GamePanel gp) {
+    public UI(GamePanel gp){
         this.gp = gp;
-        arial_40 = new Font("Arial", Font.PLAIN, 40);
-        arial_80B = new Font("Arial", Font.BOLD, 80);
+   
+        try {
+            InputStream is = getClass().getResourceAsStream("/font/DePixelHalbfett.ttf");
+            fixedsys = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
     public void showMessage(String text){
@@ -40,7 +55,7 @@ public class UI {
     public void draw(Graphics2D g2){
         this.g2 = g2;
         
-        g2.setFont(arial_40);
+        g2.setFont(fixedsys);
         g2.setColor(Color.white);
         
         // Validamos el estado del juego
@@ -56,10 +71,31 @@ public class UI {
     }
     
     public void drawPauseScreen(){
-        g2.setFont(arial_80B);
+        // Asignamos fuente y texto
+        g2.setFont(fixedsys.deriveFont(Font.PLAIN, 80f));
         String text = "PAUSED";
+        
+        // Coordenadas del texto
+        int x = getCenterX(text);
         int y = gp.screenHeight/2;
-        g2.drawString(text, getCenterX(text), y);
+        
+        // Convertimos el texto en un objeto de diseño
+        TextLayout textL = new TextLayout(text, g2.getFont(), g2.getFontRenderContext());
+        
+        // Se extrae la silueta geométrica del texto
+        Shape shape = textL.getOutline(null); // Se crea en (0,0)
+        AffineTransform transform = new AffineTransform();
+        transform.translate(x, y); // Asignamos las coordenadas del centro
+        Shape textoGeometrico = transform.createTransformedShape(shape);
+        
+        // Se dibuja un contorno negro
+        g2.setColor(Color.black);
+        g2.setStroke(new BasicStroke(5));
+        g2.draw(textoGeometrico);
+        
+        // Se dibuja el relleno blanco
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y); // Combinamos todo
     }
     
     public void drawDialogueScreen(){
@@ -71,7 +107,7 @@ public class UI {
         
         drawSubWindow(x,y,width,height);
         
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28f));
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20f));
         x += gp.tileSize/2;
         y += gp.tileSize;
         
