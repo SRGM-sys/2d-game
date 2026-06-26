@@ -26,6 +26,24 @@ public class KeyHandler implements KeyListener{
         
         int code = e.getKeyCode(); // Nos devuelve el código de la tecla presionada
         
+        // TITLE STATE
+        if(gp.gameState == gp.titleState){
+            if(code == KeyEvent.VK_W) gp.ui.commandNum--;
+            if(code == KeyEvent.VK_S) gp.ui.commandNum++;
+            gp.ui.controlCommandNum();
+            
+            if(code == KeyEvent.VK_ENTER){
+                switch(gp.ui.commandNum){
+                    case 0: 
+                        gp.gameState = gp.playState; 
+                        gp.playMusic(0);
+                        break;
+                    case 1: break; // Función aún no disponible
+                    case 2: System.exit(0); break;
+                }
+            }
+        }
+        
         // PLAY STATE
         if(gp.gameState == gp.playState){
             // El usuario se movera con: WSAD

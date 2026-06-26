@@ -29,6 +29,7 @@ public class UI {
     int messageCounter = 0;
     public boolean gameFinished = false;
     public String currentDialogue;
+    public int commandNum = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -58,16 +59,64 @@ public class UI {
         g2.setFont(fixedsys);
         g2.setColor(Color.white);
         
-        // Validamos el estado del juego
+        // TTLE STATE
+        if(gp.gameState == gp.titleState){
+            drawTitleScreen();
+        }
+        
+        // GAME STATE
         if(gp.gameState == gp.playState){
             
         }
+        
+        // PAUSE STATE
         if(gp.gameState == gp.pauseState){
             drawPauseScreen();
         }
+        
+        // DIALOGUE STATE
         if(gp.gameState == gp.dialogueState){
             drawDialogueScreen();
         }
+    }
+    
+    public void drawTitleScreen(){
+        
+        // BACKGROUND COLOR
+        g2.setColor(new Color(95, 103, 120));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        
+        // TITLE NAME
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60F));
+        String text = "The Sadness";
+        int x = getXforCenteredText(text);
+        int y = gp.tileSize * 2 + 12;
+    
+        g2.setColor(Color.black);       // Shadow color text
+        g2.drawString(text, x+5, y+5);
+        g2.setColor(Color.white);       // Main color text
+        g2.drawString(text, x, y);
+        
+        // MAIN CHARACTER IMAGE
+        x = gp.screenWidth/2 - (gp.tileSize);
+        y += gp.tileSize*2;
+        g2.drawImage(gp.player.down1, x, y, gp.tileSize*2, gp.tileSize*2, null);
+        
+        // MENU OPTIONS
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+        
+        int yM = 8, yS = 0, s = 10;
+        x = drawText("NEW GAME", yM, yS);
+        if(commandNum == 0) g2.drawString(">", x-gp.tileSize, (gp.tileSize*yM)+yS);
+        
+        yM++; yS+=s;
+        x = drawText("LOAD GAME", yM, yS);
+        if(commandNum == 1) g2.drawString(">", x-gp.tileSize, (gp.tileSize*yM)+yS);
+        
+        yM++; yS+=s;
+        x = drawText("QUIT", yM, yS);
+        if(commandNum == 2) g2.drawString(">", x-gp.tileSize, (gp.tileSize*yM)+yS);
+        
     }
     
     public void drawPauseScreen(){
@@ -76,7 +125,7 @@ public class UI {
         String text = "PAUSED";
         
         // Coordenadas del texto
-        int x = getCenterX(text);
+        int x = getXforCenteredText(text);
         int y = gp.screenHeight/2;
         
         // Convertimos el texto en un objeto de diseño
@@ -132,10 +181,24 @@ public class UI {
         
     }
     
-    public int getCenterX(String text){
+    // Esta función esta diseñada únicamente para las opciones del juego
+    public int drawText(String text, int yM, int yS){
+        int x = getXforCenteredText(text);
+        int y = (gp.tileSize*yM) + yS;
+        g2.drawString(text, x, y);  
+        
+        return x;
+    }
+    
+    public int getXforCenteredText(String text){
         // Si solo pongo "int x = gp.screenWidth/2;", no se va a presentar el texto en la mitad
         int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         return gp.screenWidth/2 - length/2;
+    }
+    
+    public void controlCommandNum(){
+        if(commandNum > 2) commandNum = 0;
+        if(commandNum < 0) commandNum = 2;
     }
     
 }

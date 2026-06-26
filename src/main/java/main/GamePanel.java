@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame(){
         aSetter.setObject();
         aSetter.setNPC();
-        playMusic(0);
+//      playMusic(0);
         gameState = titleState;
     }
         
@@ -139,8 +139,12 @@ public class GamePanel extends JPanel implements Runnable{
         
         // TITLE SCREEN
         if(gameState == titleState){
+            ui.draw(g2);
             
-        } else{ // Se dibujará esto cuando no estemos en la pantalla del título
+        } 
+        
+        // GAME 
+        else{ 
             // TILE
             tileM.draw(g2); // Es importante dibujar antes del jugador para no taparlo
             // OBJECT
