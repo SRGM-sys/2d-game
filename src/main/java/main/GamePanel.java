@@ -45,12 +45,12 @@ public class GamePanel extends JPanel implements Runnable{
     public SuperObject obj[] = new SuperObject[10]; // Mostrar 10 objetos a la vez
     public Entity npc[] = new Entity[10];
     
-    // GAME STATE (Puedo poner pausa al juego)
+    // GAME STATE (Manejar cada estadod el juego)
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
-    
     
     
     public GamePanel(){
@@ -65,7 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setObject();
         aSetter.setNPC();
         playMusic(0);
-        gameState = playState;
+        gameState = titleState;
     }
         
     public void startGameThread(){
@@ -137,28 +137,34 @@ public class GamePanel extends JPanel implements Runnable{
             drawStart = System.nanoTime();
         }
         
-        
-        // TILE
-        tileM.draw(g2); // Es importante dibujar antes del jugador para no taparlo
-        // OBJECT
-        for (SuperObject obj1 : obj) {
-            if (obj1 != null) {
-                obj1.draw(g2, this);
+        // TITLE SCREEN
+        if(gameState == titleState){
+            
+        } else{ // Se dibujará esto cuando no estemos en la pantalla del título
+            // TILE
+            tileM.draw(g2); // Es importante dibujar antes del jugador para no taparlo
+            // OBJECT
+            for (SuperObject obj1 : obj) {
+                if (obj1 != null) {
+                    obj1.draw(g2, this);
+                }
             }
-        }
-        
-        // NPC
-        for (Entity npc1 : npc) {
-            if (npc1 != null) {
-                npc1.drawNPC(g2);
-            }
-        }
 
-        // PLAYER
-        player.draw(g2);
+            // NPC
+            for (Entity npc1 : npc) {
+                if (npc1 != null) {
+                    npc1.drawNPC(g2);
+                }
+            }
+
+            // PLAYER
+            player.draw(g2);
+
+            // UI
+            ui.draw(g2);
+        }
         
-        // UI
-        ui.draw(g2);
+        
         
         // DEBUG TIME END
         if(keyH.checkDrawTime){
