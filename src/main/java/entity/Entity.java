@@ -11,6 +11,7 @@ import main.UtilityTool;
 
 public class Entity {
     
+    // MOVIMIENTO DEL JUGADOR
     public GamePanel gp;
     public int worldX,worldY;
     public int speed;
@@ -19,14 +20,19 @@ public class Entity {
     public int spriteCounter = 0;
     public int spriteNum = 1;
     
-    // Cuadro invisible que nos servirá para las colisiones
+    // COLISIONES
     public Rectangle solidArea = new Rectangle(0,0,48,48); // Cuadro por defecto
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     
+    // DIÁLOGOS
     public int actionLockCounter = 0;
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
+    
+    // ESTADO DEL JUGADOR
+    public int maxLife;
+    public int life;
     
     public Entity(GamePanel gp){
         this.gp = gp;

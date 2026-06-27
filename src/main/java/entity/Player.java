@@ -34,10 +34,15 @@ public class Player extends Entity{
     
     // Vamos a establecer las configuraciones del Player
     public void setDefaultValues(){
+        // POSICIÓN INICIAL
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
+        
+        // ESTADO DEL JUGADOR
+        maxLife = 6;    // 1 vida es la mitad de un corazón
+        life = maxLife;
     }
     
     public void getPlayerImage(){

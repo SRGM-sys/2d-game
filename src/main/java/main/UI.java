@@ -9,14 +9,17 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 //-----------------------------------------------------------
 import java.io.IOException;
 import java.io.InputStream;
+import object.Obj_Heart;
+import object.SuperObject;
 
 /*
 * Esta clase manejará todo lo relacionado a la interfaz de usuario
 * Mensajes de texto
-* Iconos de elementos
+* Iconos de elementos en pantalla
 */
 
 public class UI {
@@ -24,12 +27,16 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font fixedsys;
+    
     public boolean messageOn = false;
     public String message;
     int messageCounter = 0;
+    
     public boolean gameFinished = false;
     public String currentDialogue;
     public int commandNum = 0;
+    
+    BufferedImage heart_full, heart_half, heart_blank;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -42,6 +49,12 @@ public class UI {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        
+        // CREATE HUD OBJECT
+        SuperObject heart = new Obj_Heart(gp);
+        heart_full = heart.image;
+        heart_half = heart.image2;
+        heart_blank = heart.image3;
     }
     
     public void showMessage(String text){
@@ -66,12 +79,13 @@ public class UI {
         
         // GAME STATE
         if(gp.gameState == gp.playState){
-            
+            drawPlayerLife();
         }
         
         // PAUSE STATE
         if(gp.gameState == gp.pauseState){
             drawPauseScreen();
+            drawPlayerLife();
         }
         
         // DIALOGUE STATE
@@ -116,6 +130,36 @@ public class UI {
         yM++; yS+=s;
         x = drawText("QUIT", yM, yS);
         if(commandNum == 2) g2.drawString(">", x-gp.tileSize, (gp.tileSize*yM)+yS);
+        
+    }
+    
+    public void drawPlayerLife(){
+        gp.player.life = 5;
+        
+        int x = (gp.tileSize * gp.maxScreenCol) - (gp.tileSize + gp.tileSize/3);
+        int y = gp.tileSize/3;
+        int i = 0;
+        
+        // DRAW BLANK HEART
+        while(i < gp.player.maxLife/2){
+            g2.drawImage(heart_blank, x, y, null);
+            i++;
+            x -= gp.tileSize;
+        }
+        
+        // DRAW HALF/COMPLETE HEART'S
+        // Básicamente vamos a dibujar encima de los corazones blancos
+        x += i * gp.tileSize;
+        i = 0;
+        while(i < gp.player.life){
+            g2.drawImage(heart_half, x, y, null);
+            i++;
+            if(i < gp.player.life){
+                g2.drawImage(heart_full, x, y, null);
+            }
+            i++;
+            x -= gp.tileSize;
+        }
         
     }
     
