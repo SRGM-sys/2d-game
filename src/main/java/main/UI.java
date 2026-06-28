@@ -134,7 +134,6 @@ public class UI {
     }
     
     public void drawPlayerLife(){
-        gp.player.life = 5;
         
         int x = (gp.tileSize * gp.maxScreenCol) - (gp.tileSize + gp.tileSize/3);
         int y = gp.tileSize/3;

@@ -81,7 +81,7 @@ public class Player extends Entity{
             
             // CHECK TILE COLLISION
             collisionOn = false;
-            gp.cChecker.checkTile(this); // Polimorfismo, Plater es una Entity
+            gp.cChecker.checkTile(this); // Polimorfismo, Player es una Entity
             
             // CHECK OBJECT COLLISION
             int objIndex = gp.cChecker.checkObject(this, true);
@@ -90,6 +90,12 @@ public class Player extends Entity{
             // CHECK NPC COLLISION
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
+            
+            // CHECK EVENT COLLISION
+            gp.eHandler.checkEvent();
+            
+            // Si presiono Enter se resetea inmediatamente y no se queda "guardado" como true.
+            gp.keyH.enterPressed = false;
             
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
             if(!collisionOn){
@@ -123,9 +129,7 @@ public class Player extends Entity{
             }
         }
         
-        // Lo sacamos del if(i != 999). De esta forma, si presiono Enter al aire,
-        // se resetea inmediatamente y no se queda "guardado" como true.
-        gp.keyH.enterPressed = false;
+        
     }
     
     public void pickUpObject(int i){
