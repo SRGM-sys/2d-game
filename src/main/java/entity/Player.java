@@ -1,6 +1,8 @@
 
 package entity;
 
+import java.awt.AlphaComposite;
+import static java.awt.AlphaComposite.SRC_OVER;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -14,6 +16,7 @@ public class Player extends Entity{
     // Estas variables van a ser la camara del jugador
     public final int screenX;
     public final int screenY;
+    int standCounter = 0;
     
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -91,6 +94,10 @@ public class Player extends Entity{
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
             
+            //  CHECK MONSTER COLLISION
+            int monIndex = gp.cChecker.checkEntity(this, gp.mon);
+            contactMonster(monIndex);
+            
             // CHECK EVENT COLLISION
             gp.eHandler.checkEvent();
             
@@ -117,7 +124,22 @@ public class Player extends Entity{
                 else if(spriteNum == 2) spriteNum = 1;
                 spriteCounter  = 0;
             }
-        }   
+        } else{
+            standCounter++;
+            if(standCounter==20 ){
+                spriteNum=1;
+                standCounter=0;
+            }
+        } 
+        
+        if(invincible){
+            invincibleCounter++;
+            if(invincibleCounter > 60){
+                invincible = false;
+                invincibleCounter = 0;
+            }
+            
+        }
     }
     
     public void interactNPC(int i){
@@ -139,30 +161,48 @@ public class Player extends Entity{
         }
     }
     
+    public void contactMonster(int i){
+        if (i != 999 && !invincible){
+            life -=1;
+            invincible = true;
+        }
+    }
+    
     // Organizamos las imágenes en cada caso de movimiento del personaje
+    @Override
     public void draw(Graphics2D g2){
         BufferedImage image = null;
         
         switch(direction){
-            case "up":     
+            case "up" -> {
                 if (spriteNum == 1) image = up1;    
                 else if(spriteNum == 2) image = up2;
-                break;
-            case "down":   
+            }
+            case "down" -> {
                 if (spriteNum == 1) image = down1; 
                 else if(spriteNum == 2) image = down2;
-                break;
-            case "left":   
+            }
+            case "left" -> {
                 if (spriteNum == 1) image = left1;  
                 else if(spriteNum == 2) image = left2;
-                break;
-            case "right":  
+            }
+            case "right" -> {
                 if (spriteNum == 1) image = right1; 
                 else if(spriteNum == 2) image = right2;
-                break;
+            }
         }
-        
+                
+        // VISUAL EFFECT DAMAGE
+        if(invincible){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+        // Se dibujará al personaje un poco transparente
         g2.drawImage(image, screenX, screenY, null);
+        
+        // Luego reiniciamos el Alpha
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+     
     }
     
     

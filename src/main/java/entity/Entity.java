@@ -11,7 +11,7 @@ import main.UtilityTool;
 
 public class Entity {
     
-    // MOVIMIENTO DEL JUGADOR
+    // MOVIMIENTO
     public GamePanel gp;
     public int worldX,worldY;
     public int speed;
@@ -38,6 +38,11 @@ public class Entity {
     // ESTADO DEL JUGADOR
     public int maxLife;
     public int life;
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
+    
+    // ESTADO GENERAL DE LA ENTIDAD
+    public int type; // 0 = player ; 1 = npc ; 2 = monster
     
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -84,7 +89,17 @@ public class Entity {
         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
-        gp.cChecker.checkerPlayer(this);
+        gp.cChecker.checkEntity(this, gp.npc);
+        gp.cChecker.checkEntity(this, gp.mon);
+        boolean contactPlayer = gp.cChecker.checkerPlayer(this);
+        
+        // Si el jugador choca con un mounstro entonces
+        if(this.type == 2 && contactPlayer){
+            if(!gp.player.invincible){
+                gp.player.life -= 1;
+                gp.player.invincible = true;
+            }
+        }
         
         if(!collisionOn){
                 

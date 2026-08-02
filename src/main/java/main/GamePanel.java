@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import javax.swing.JPanel;
 import tile.TileManager;
 
@@ -47,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Player player = new Player(this, keyH);
     public Entity obj[] = new Entity[10]; // Mostrar 10 objetos a la vez
     public Entity npc[] = new Entity[10];
+    public Entity mon[] = new Entity[10];
     ArrayList<Entity> entityList = new ArrayList<>();
     
     // GAME STATE (Manejar cada estadod el juego)
@@ -68,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame(){
         aSetter.setObject();
         aSetter.setNPC();
+        aSetter.setMonster();
 //      playMusic(0);
         gameState = titleState;
     }
@@ -117,12 +118,17 @@ public class GamePanel extends JPanel implements Runnable{
             // El jugador y los NPC se pueden mover
             player.update(); 
             for (Entity npc1 : npc) {
-            if (npc1 != null) {
-                npc1.update();
+                if (npc1 != null) {
+                    npc1.update();
+                }
+            }
+            for (Entity mon : mon) {
+                if (mon != null) {
+                    mon.update();
+                }
             }
         }
             
-        }
         if(gameState == pauseState){
             // Por ahora nada
         }
@@ -163,6 +169,12 @@ public class GamePanel extends JPanel implements Runnable{
             for (Entity obj1 : obj) {
                 if (obj1 != null) {
                     entityList.add(obj1);
+                }
+            }
+            
+            for (Entity mon1 : mon) {
+                if (mon1 != null) {
+                    entityList.add(mon1);
                 }
             }
             
