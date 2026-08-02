@@ -16,7 +16,7 @@ public class Entity {
     public int worldX,worldY;
     public int speed;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction;
+    public String direction = "down";
     public int spriteCounter = 0;
     public int spriteNum = 1;
     
@@ -29,6 +29,11 @@ public class Entity {
     public int actionLockCounter = 0;
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
+    
+    // OBJECT CLASS
+    public BufferedImage image, image2, image3;
+    public String name;
+    public boolean collision = false;
     
     // ESTADO DEL JUGADOR
     public int maxLife;
@@ -101,7 +106,7 @@ public class Entity {
     }
     
     // Vamos a crear una función para dibujara los npc
-    public void drawNPC(Graphics2D g2){
+    public void draw(Graphics2D g2){
         BufferedImage image = null;
         
         int screenX = worldX - gp.player.worldX + gp.player.screenX; 
@@ -139,7 +144,20 @@ public class Entity {
             
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
         }
-        
-        
+         
+    }
+    
+    public BufferedImage setup(String imagePath){
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+            
+        try{
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+        }catch(IOException e){
+            e.printStackTrace();    
+        }
+            
+        return image;
     }
 }

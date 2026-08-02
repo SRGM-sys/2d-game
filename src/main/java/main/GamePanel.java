@@ -6,8 +6,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JPanel;
-import object.SuperObject;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -43,8 +45,9 @@ public class GamePanel extends JPanel implements Runnable{
     
     // ENTITY & OBJECT
     public Player player = new Player(this, keyH);
-    public SuperObject obj[] = new SuperObject[10]; // Mostrar 10 objetos a la vez
+    public Entity obj[] = new Entity[10]; // Mostrar 10 objetos a la vez
     public Entity npc[] = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
     
     // GAME STATE (Manejar cada estadod el juego)
     public int gameState;
@@ -148,23 +151,36 @@ public class GamePanel extends JPanel implements Runnable{
         else{ 
             // TILE
             tileM.draw(g2); // Es importante dibujar antes del jugador para no taparlo
-            // OBJECT
-            for (SuperObject obj1 : obj) {
-                if (obj1 != null) {
-                    obj1.draw(g2, this);
-                }
-            }
-
-            // NPC
+            
+            entityList.add(player);
+            
             for (Entity npc1 : npc) {
                 if (npc1 != null) {
-                    npc1.drawNPC(g2);
+                    entityList.add(npc1);
                 }
             }
-
-            // PLAYER
-            player.draw(g2);
-
+            
+            for (Entity obj1 : obj) {
+                if (obj1 != null) {
+                    entityList.add(obj1);
+                }
+            }
+            
+            // Ordenamos con un sort personalizado (Orden de dibujo)
+            // Expresión Lambda
+            Collections.sort(entityList, (Entity e1, Entity e2) -> {
+                int result = Integer.compare(e1.worldY, e2.worldY);
+                return result;
+            });
+            
+            // DRAW ENTITYS
+            for(int i=0; i < entityList.size(); i++){
+                entityList.get(i).draw(g2);
+            }
+            // EMPTY ENTITY LIST
+            for(int i=0; i < entityList.size(); i++){
+                entityList.remove(i);
+            }
             // UI
             ui.draw(g2);
         }

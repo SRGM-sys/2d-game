@@ -46,8 +46,9 @@ public class EventHandler {
         // Comprobamos que el usuario esté a 1 cuadro de distancia luego de activar un evento
         // Para que vuelva a funcionar nuevamente 
         int xDistance = Math.abs(gp.player.worldX - previusEventX);
-        int yDistance = Math.abs(gp.player.worldX - previusEventY);
+        int yDistance = Math.abs(gp.player.worldY - previusEventY);
         int distance = Math.max(xDistance, yDistance);
+        
         if(distance > gp.tileSize) canTouchEvent = true;
         
         if(canTouchEvent){
@@ -91,7 +92,6 @@ public class EventHandler {
         gp.gameState = gameState;
         gp.ui.currentDialogue = "Pisaste una trampa";
         gp.player.life--;
-        eventRect[col][row].eventDone = true;
         canTouchEvent = false;
         
     }

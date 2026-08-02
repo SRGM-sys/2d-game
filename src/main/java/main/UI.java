@@ -1,5 +1,6 @@
 package main;
 
+import entity.Entity;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -14,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import object.Obj_Heart;
-import object.SuperObject;
 
 /*
 * Esta clase manejará todo lo relacionado a la interfaz de usuario
@@ -51,7 +51,7 @@ public class UI {
         }
         
         // CREATE HUD OBJECT
-        SuperObject heart = new Obj_Heart(gp);
+        Entity heart = new Obj_Heart(gp);
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_blank = heart.image3;
