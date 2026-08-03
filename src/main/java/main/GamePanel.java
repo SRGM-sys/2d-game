@@ -1,7 +1,10 @@
 package main;
 
+import handler.KeyHandler;
+import handler.EventHandler;
 import entity.Entity;
 import entity.Player;
+import handler.MouseHandler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -39,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable{
     public AssetSetter aSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
+    public MouseHandler mouseH = new MouseHandler();
     Thread gameThread;
   
     
@@ -62,6 +66,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.setBackground(Color.black);
         this.setDoubleBuffered(true); //Mayor renderizado
         this.addKeyListener(keyH);
+        this.addMouseListener(mouseH);
         this.setFocusable(true);
     }
     
@@ -190,9 +195,8 @@ public class GamePanel extends JPanel implements Runnable{
                 entityList.get(i).draw(g2);
             }
             // EMPTY ENTITY LIST
-            for(int i=0; i < entityList.size(); i++){
-                entityList.remove(i);
-            }
+            entityList.clear();
+            
             // UI
             ui.draw(g2);
         }

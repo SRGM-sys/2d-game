@@ -10,7 +10,7 @@ public class Obj_Chest extends Entity{
         
         super(gp);
         name = "chest";
-        down1 = setup("/objects/chest");
+        down1 = setup("objects","chest", super.px, super.px);
     
     }
 }

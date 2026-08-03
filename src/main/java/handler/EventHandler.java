@@ -1,6 +1,8 @@
-package main;
+package handler;
 
-import java.awt.Rectangle;
+import main.EventRect;
+import main.GamePanel;
+
 
 // Esta clase manejara diferentes eventos del jugador en puntos específicos del mapa
 

@@ -2,12 +2,11 @@
 package entity;
 
 import java.awt.AlphaComposite;
-import static java.awt.AlphaComposite.SRC_OVER;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import main.GamePanel;
-import main.KeyHandler;
+import handler.KeyHandler;
 
 public class Player extends Entity{
     
@@ -33,6 +32,7 @@ public class Player extends Entity{
         
         setDefaultValues();
         getPlayerImage();
+        getPlayerAttackImage();
     }
     
     // Vamos a establecer las configuraciones del Player
@@ -49,26 +49,43 @@ public class Player extends Entity{
     }
     
     public void getPlayerImage(){
-        
-        up1 = setup("player", "boy_up_1");
-        up2 = setup("player", "boy_up_2");
-        down1 = setup("player", "boy_down_1");
-        down2 = setup("player", "boy_down_2");
-        left1 = setup("player", "boy_left_1");
-        left2 = setup("player", "boy_left_2");
-        right1 = setup("player", "boy_right_1");
-        right2 = setup("player", "boy_right_2");
-        
+        up1 = setup("player", "boy_up_1", super.px, super.px);
+        up2 = setup("player", "boy_up_2", super.px, super.px);
+        down1 = setup("player", "boy_down_1", super.px, super.px);
+        down2 = setup("player", "boy_down_2", super.px, super.px);
+        left1 = setup("player", "boy_left_1", super.px, super.px);
+        left2 = setup("player", "boy_left_2", super.px, super.px);
+        right1 = setup("player", "boy_right_1", super.px, super.px);
+        right2 = setup("player", "boy_right_2", super.px, super.px);
     }
+    
+    public void getPlayerAttackImage(){
+        atkUp1 = setup("player", "boy_attack_up_1", super.px, super.px*2);
+        atkUp2 = setup("player", "boy_attack_up_2", super.px, super.px*2);
+        atkDown1 = setup("player", "boy_attack_down_1", super.px, super.px*2);
+        atkDown2 = setup("player", "boy_attack_down_2", super.px, super.px*2);
+        atkLeft1 = setup("player", "boy_attack_left_1", super.px*2, super.px);
+        atkLeft2 = setup("player", "boy_attack_left_2", super.px*2, super.px);
+        atkRight1 = setup("player", "boy_attack_right_1", super.px*2, super.px);
+        atkRight2 = setup("player", "boy_attack_right_2", super.px*2, super.px);
+    }
+    
     
     /* VAMOS A PONER EL UPDATE Y DRAW PARA CADA ENTIDAD
     Esto lo haremos para evitar un código gigantesco en GamePanel*/
     @Override
     public void update(){
         
+        verifyAttack();
+        
+        if(attacking){
+            attacking();
+        }
+        
         // Este gran if me va a permtir que el personaje no se mueva si el 
         // usuario no presiona ninguna tecla
-        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
+        else if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed
+            || keyH.enterPressed){
             if(keyH.upPressed){
                 direction = "up";
             }
@@ -105,7 +122,7 @@ public class Player extends Entity{
             gp.keyH.enterPressed = false;
             
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
-            if(!collisionOn){
+            if(!collisionOn && !keyH.enterPressed){
                 
                 switch(direction){
                     case "up": worldY -= speed; break;
@@ -142,6 +159,28 @@ public class Player extends Entity{
         }
     }
     
+    public void attacking(){
+        spriteCounter++;
+        
+        if(spriteCounter <= 5){
+            spriteNum = 1;
+        }
+        if(spriteCounter > 5 && spriteCounter < 25){
+            spriteNum = 2;
+        }
+        if(spriteCounter > 25){
+            spriteNum = 1;
+            spriteCounter = 0;
+            attacking = false;
+        }
+    }
+    
+    public void verifyAttack(){
+        if(gp.mouseH.leftPressed){
+            attacking = true;
+        }
+    }
+    
     public void interactNPC(int i){
         // Cuando i = 999 es pq tocamos a la entidad
         if(i != 999){
@@ -149,9 +188,7 @@ public class Player extends Entity{
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
             }
-        }
-        
-        
+        }  
     }
     
     public void pickUpObject(int i){
@@ -175,20 +212,40 @@ public class Player extends Entity{
         
         switch(direction){
             case "up" -> {
-                if (spriteNum == 1) image = up1;    
-                else if(spriteNum == 2) image = up2;
+                if(!attacking){
+                    if (spriteNum == 1) image = up1;    
+                    if (spriteNum == 2) image = up2;
+                } else{
+                    if (spriteNum == 1) image = atkUp1;    
+                    if (spriteNum == 2) image = atkUp2;
+                }
             }
             case "down" -> {
-                if (spriteNum == 1) image = down1; 
-                else if(spriteNum == 2) image = down2;
+                if(!attacking){
+                    if (spriteNum == 1) image = down1; 
+                    if (spriteNum == 2) image = down2;
+                }else{
+                    if (spriteNum == 1) image = atkDown1; 
+                    if (spriteNum == 2) image = atkDown2;
+                }
             }
             case "left" -> {
-                if (spriteNum == 1) image = left1;  
-                else if(spriteNum == 2) image = left2;
+                if(!attacking){
+                    if (spriteNum == 1) image = left1;  
+                    if (spriteNum == 2) image = left2;
+                } else{
+                    if (spriteNum == 1) image = atkLeft1;  
+                    if (spriteNum == 2) image = atkLeft2;
+                }
             }
             case "right" -> {
-                if (spriteNum == 1) image = right1; 
-                else if(spriteNum == 2) image = right2;
+                if(!attacking){
+                    if (spriteNum == 1) image = right1; 
+                    if (spriteNum == 2) image = right2;
+                } else{
+                    if (spriteNum == 1) image = atkRight1; 
+                    if (spriteNum == 2) image = atkRight2;
+                }
             }
         }
                 

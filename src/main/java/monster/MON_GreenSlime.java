@@ -6,8 +6,11 @@ import main.GamePanel;
 
 public class MON_GreenSlime extends Entity{
     
+    GamePanel gp;
+    
     public MON_GreenSlime(GamePanel gp) {
         super(gp);
+        this.gp = gp;
         type = 2;
         name = "Green Slime";
         speed = 1;
@@ -25,14 +28,14 @@ public class MON_GreenSlime extends Entity{
     }
     
     public void getImage (){
-        up1 = setup("/monster/greenslime_down_1");
-        up2 = setup("/monster/greenslime_down_2");
-        down1 = setup("/monster/greenslime_down_1");
-        down2 = setup("/monster/greenslime_down_2");
-        left1 = setup("/monster/greenslime_down_1");
-        left2 = setup("/monster/greenslime_down_2");
-        right1 = setup("/monster/greenslime_down_1");
-        right2 = setup("/monster/greenslime_down_2");
+        up1 = setup("monster","greenslime_down_1", super.px, super.px);
+        up2 = setup("monster","greenslime_down_2", super.px, super.px);
+        down1 = setup("monster","greenslime_down_1", super.px, super.px);
+        down2 = setup("monster","greenslime_down_2", super.px, super.px);
+        left1 = setup("monster","greenslime_down_1", super.px, super.px);
+        left2 = setup("monster","greenslime_down_2", super.px, super.px);
+        right1 = setup("monster","greenslime_down_1", super.px, super.px);
+        right2 = setup("monster","greenslime_down_2", super.px, super.px);
     }
     
     // Vamos a hacer una IA sencilla (Copiamos la del NPC)

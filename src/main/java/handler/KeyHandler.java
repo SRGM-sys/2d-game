@@ -1,7 +1,8 @@
-package main;
+package handler;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import main.GamePanel;
 
 // Con esto manejaremos el juego mediantes las teclas del teclado
 

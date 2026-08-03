@@ -16,9 +16,11 @@ public class Entity {
     public int worldX,worldY;
     public int speed;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage atkUp1, atkUp2, atkDown1, atkDown2, atkLeft1, atkLeft2, atkRight1, atkRight2;
     public String direction = "down";
     public int spriteCounter = 0;
     public int spriteNum = 1;
+    public int px;
     
     // COLISIONES
     public Rectangle solidArea = new Rectangle(0,0,48,48); // Cuadro por defecto
@@ -40,32 +42,17 @@ public class Entity {
     public int life;
     public boolean invincible = false;
     public int invincibleCounter = 0;
+    public boolean attacking = false;
     
     // ESTADO GENERAL DE LA ENTIDAD
     public int type; // 0 = player ; 1 = npc ; 2 = monster
     
     public Entity(GamePanel gp){
         this.gp = gp;
+        this.px = gp.tileSize;
     }
     
     public void setAction(){}
-
-    // Vamos a escalar los personajes antes de entrar al bucle
-    public BufferedImage setup(String folder, String imageName){
-        
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-        
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/"+folder+"/"+imageName+".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-            
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        
-        return image;
-    }
     
     public void speak(){
         if(dialogues[dialogueIndex] == null){
@@ -162,17 +149,21 @@ public class Entity {
          
     }
     
-    public BufferedImage setup(String imagePath){
+    // Vamos a escalar los personajes antes de entrar al bucle
+    public BufferedImage setup(String folder, String imageName, int width, int height){
+        
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
-            
+        
         try{
-            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+            image = ImageIO.read(getClass().getResourceAsStream("/"+folder+"/"+imageName+".png"));
             image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        }catch(IOException e){
-            e.printStackTrace();    
-        }
             
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        
         return image;
     }
+    
 }
