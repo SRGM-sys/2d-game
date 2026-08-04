@@ -1,6 +1,7 @@
 
 package entity;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -24,6 +25,7 @@ public class Entity {
     
     // COLISIONES
     public Rectangle solidArea = new Rectangle(0,0,48,48); // Cuadro por defecto
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     
@@ -104,7 +106,15 @@ public class Entity {
             if(spriteNum == 1) spriteNum = 2;
             else if(spriteNum == 2) spriteNum = 1;
             spriteCounter  = 0;
-        }       
+        }    
+        
+        if(invincible){
+            invincibleCounter++;
+            if(invincibleCounter > 40){
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
     
     // Vamos a crear una función para dibujara los npc
@@ -144,7 +154,12 @@ public class Entity {
                 break;
             }
             
+            if(invincible){
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            }
+            
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
          
     }
@@ -157,7 +172,7 @@ public class Entity {
         
         try{
             image = ImageIO.read(getClass().getResourceAsStream("/"+folder+"/"+imageName+".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+            image = uTool.scaleImage(image, width, height);
             
         }catch(IOException e){
             e.printStackTrace();

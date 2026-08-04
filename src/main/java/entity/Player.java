@@ -30,6 +30,9 @@ public class Player extends Entity{
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y; 
         
+        attackArea.width = 36;
+        attackArea.height = 36;
+        
         setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
@@ -167,6 +170,34 @@ public class Player extends Entity{
         }
         if(spriteCounter > 5 && spriteCounter < 25){
             spriteNum = 2;
+            
+            // Objeto las coordenadas actuales
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int solidAreaWidth = solidArea.width;
+            int solidAreaHeight = solidArea.height;
+            
+            // Ajustar las coordenadas X y Y globales
+            switch(direction){
+                case "up": worldY -= attackArea.height; break;
+                case "down": worldY += attackArea.height; break;
+                case "left": worldX -= attackArea.width; break;
+                case "right": worldX += attackArea.width; break;
+            }
+            
+            // Convertir el area de ataque en un solidArea
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+            
+            // Comprobar la colision del mounstro con el X/Y global y solidArea
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.mon);
+            damageMonster(monsterIndex);
+            
+            
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.width = solidAreaWidth;
+            solidArea.height = solidAreaHeight;
         }
         if(spriteCounter > 25){
             spriteNum = 1;
@@ -205,9 +236,24 @@ public class Player extends Entity{
         }
     }
     
+    public void damageMonster(int i){
+        if(i != 999){
+            if(!gp.mon[i].invincible){
+                gp.mon[i].life -= 1;
+                gp.mon[i].invincible = true;
+                if(gp.mon[i].life <= 0){
+                    gp.mon[i] = null;
+                }
+            }
+        }
+    }
+    
     // Organizamos las imágenes en cada caso de movimiento del personaje
     @Override
     public void draw(Graphics2D g2){
+        int tempScreenX = screenX;
+        int tempScreenY = screenY;
+        
         BufferedImage image = null;
         
         switch(direction){
@@ -216,6 +262,7 @@ public class Player extends Entity{
                     if (spriteNum == 1) image = up1;    
                     if (spriteNum == 2) image = up2;
                 } else{
+                    tempScreenY  = screenY - gp.tileSize;
                     if (spriteNum == 1) image = atkUp1;    
                     if (spriteNum == 2) image = atkUp2;
                 }
@@ -234,6 +281,7 @@ public class Player extends Entity{
                     if (spriteNum == 1) image = left1;  
                     if (spriteNum == 2) image = left2;
                 } else{
+                    tempScreenX  = screenX - gp.tileSize;
                     if (spriteNum == 1) image = atkLeft1;  
                     if (spriteNum == 2) image = atkLeft2;
                 }
@@ -251,10 +299,10 @@ public class Player extends Entity{
                 
         // VISUAL EFFECT DAMAGE
         if(invincible){
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         }
         // Se dibujará al personaje un poco transparente
-        g2.drawImage(image, screenX, screenY, null);
+        g2.drawImage(image, tempScreenX, tempScreenY, null);
         
         // Luego reiniciamos el Alpha
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
