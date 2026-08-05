@@ -242,7 +242,7 @@ public class Player extends Entity{
                 gp.mon[i].life -= 1;
                 gp.mon[i].invincible = true;
                 if(gp.mon[i].life <= 0){
-                    gp.mon[i] = null;
+                    gp.mon[i].dying = true;
                 }
             }
         }

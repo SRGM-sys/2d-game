@@ -12,42 +12,48 @@ import main.UtilityTool;
 
 public class Entity {
     
-    // MOVIMIENTO
+    // VALORES PRINCIPALES
     public GamePanel gp;
     public int worldX,worldY;
-    public int speed;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public BufferedImage atkUp1, atkUp2, atkDown1, atkDown2, atkLeft1, atkLeft2, atkRight1, atkRight2;
     public String direction = "down";
-    public int spriteCounter = 0;
-    public int spriteNum = 1;
     public int px;
-    
+   
     // COLISIONES
     public Rectangle solidArea = new Rectangle(0,0,48,48); // Cuadro por defecto
     public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collisionOn = false;
+    
     
     // DIÁLOGOS
-    public int actionLockCounter = 0;
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
     
-    // OBJECT CLASS
+    // IMÁGENES
     public BufferedImage image, image2, image3;
-    public String name;
-    public boolean collision = false;
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage atkUp1, atkUp2, atkDown1, atkDown2, atkLeft1, atkLeft2, atkRight1, atkRight2;
     
-    // ESTADO DEL JUGADOR
+    // ESTADO DE LA ENTIDAD
+    public int spriteNum = 1;
+    public boolean collisionOn = false;
+    public boolean invincible = false;
+    public boolean attacking = false;
+    public boolean alive = true; 
+    public boolean dying = false;
+    
+    // ATRIBUTO DE LA ENTIDAD
+    public int type; // 0 = player ; 1 = npc ; 2 = monster
+    public boolean collision = false;
+    public String name;
+    public int speed;
     public int maxLife;
     public int life;
-    public boolean invincible = false;
-    public int invincibleCounter = 0;
-    public boolean attacking = false;
     
-    // ESTADO GENERAL DE LA ENTIDAD
-    public int type; // 0 = player ; 1 = npc ; 2 = monster
+    // COUNTERS
+    public int invincibleCounter = 0;
+    public int actionLockCounter = 0;
+    public int spriteCounter = 0;
+    public int dyingCounter = 0;
     
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -158,10 +164,38 @@ public class Entity {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             }
             
+            if(dying){
+                dyingAnimaton(g2);
+            }
+            
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
          
+    }
+    
+    public void dyingAnimaton(Graphics2D g2){
+        dyingCounter++;
+        int i = 5;
+        
+        if(dyingCounter <= i) changeAlpha(g2, 0);
+        if(dyingCounter > i && dyingCounter <= i*2) changeAlpha(g2, 1);
+        if(dyingCounter > i*2 && dyingCounter <= i*3) changeAlpha(g2, 0);
+        if(dyingCounter > i*3 && dyingCounter <= i*4) changeAlpha(g2, 1);
+        if(dyingCounter > i*4 && dyingCounter <= i*5) changeAlpha(g2, 0);
+        if(dyingCounter > i*5 && dyingCounter <= i*6) changeAlpha(g2, 1);
+        if(dyingCounter > i*6 && dyingCounter <= i*7) changeAlpha(g2, 0);
+        if(dyingCounter > i*7 && dyingCounter <= i*8) changeAlpha(g2, 1);
+        if(dyingCounter > i*8){
+            dying = false;
+            alive = false;            
+        }
+        
+    }
+    
+    public void changeAlpha(Graphics2D g2, float alphaValue){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));            
+        
     }
     
     // Vamos a escalar los personajes antes de entrar al bucle
