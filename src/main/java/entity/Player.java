@@ -208,6 +208,7 @@ public class Player extends Entity{
     
     public void verifyAttack(){
         if(gp.mouseH.leftPressed){
+            gp.soundEffect(8);
             attacking = true;
         }
     }
@@ -231,6 +232,7 @@ public class Player extends Entity{
     
     public void contactMonster(int i){
         if (i != 999 && !invincible){
+            gp.soundEffect(7);
             life -=1;
             invincible = true;
         }
@@ -239,6 +241,7 @@ public class Player extends Entity{
     public void damageMonster(int i){
         if(i != 999){
             if(!gp.mon[i].invincible){
+                gp.soundEffect(6);
                 gp.mon[i].life -= 1;
                 gp.mon[i].invincible = true;
                 if(gp.mon[i].life <= 0){

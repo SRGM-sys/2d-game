@@ -2,6 +2,7 @@
 package entity;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -91,6 +92,7 @@ public class Entity {
         // Si el jugador choca con un mounstro entonces
         if(this.type == 2 && contactPlayer){
             if(!gp.player.invincible){
+                gp.soundEffect(7);
                 gp.player.life -= 1;
                 gp.player.invincible = true;
             }
@@ -158,6 +160,12 @@ public class Entity {
                 if (spriteNum == 1) image = right1; 
                 else if(spriteNum == 2) image = right2;
                 break;
+            }
+            
+            // MONSTER HP BAR
+            if(type == 2){
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(screenX, screenY-15, gp.tileSize, 10);
             }
             
             if(invincible){
