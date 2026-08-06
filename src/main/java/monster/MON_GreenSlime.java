@@ -63,4 +63,12 @@ public class MON_GreenSlime extends Entity{
             actionLockCounter = 0;
         }
     }
+    
+    @Override
+    public void damageReaction(){
+        actionLockCounter = 0;
+        // Esta reacción de aquí el slime mira a la dirección del jugador
+        // Es decir cuando es golpeado se va a alejar
+        direction = gp.player.direction;
+    }
 }

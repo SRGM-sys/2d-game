@@ -41,6 +41,7 @@ public class Entity {
     public boolean attacking = false;
     public boolean alive = true; 
     public boolean dying = false;
+    boolean hpBarOn = false;
     
     // ATRIBUTO DE LA ENTIDAD
     public int type; // 0 = player ; 1 = npc ; 2 = monster
@@ -55,6 +56,7 @@ public class Entity {
     public int actionLockCounter = 0;
     public int spriteCounter = 0;
     public int dyingCounter = 0;
+    public int hpBarCounter = 0;
     
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -62,7 +64,7 @@ public class Entity {
     }
     
     public void setAction(){}
-    
+    public void damageReaction(){}
     public void speak(){
         if(dialogues[dialogueIndex] == null){
             dialogueIndex = 0;
@@ -163,13 +165,27 @@ public class Entity {
             }
             
             // MONSTER HP BAR
-            if(type == 2){
+            if(type == 2 && hpBarOn){
+                
+                double oneScale = (double) gp.tileSize / maxLife;
+                double hpBarValue = oneScale*life;
+                
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(screenX-1, screenY-16, gp.tileSize+2, 12);
                 g2.setColor(new Color(255,0,30));
-                g2.fillRect(screenX, screenY-15, gp.tileSize, 10);
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
+            
+                hpBarCounter++;
+                if(hpBarCounter > 600){ // Desaparece luego de 10 segundos
+                    hpBarCounter  = 0;
+                    hpBarOn = false;
+                }
             }
             
             if(invincible){
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+                hpBarOn = true;
+                hpBarCounter = 0;
+                changeAlpha(g2, 0.4F);
             }
             
             if(dying){
@@ -177,7 +193,7 @@ public class Entity {
             }
             
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            changeAlpha(g2, 1F);
         }
          
     }
